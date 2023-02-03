@@ -1,8 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components"
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
-// import PropertyList from "../components/PropertyList";
+import PropertyList from "../components/PropertyList";
+import { useLocation } from 'react-router-dom'
 
 const Container = styled.div``;
 
@@ -31,14 +33,29 @@ const Select = styled.select`
 `;
 const Option = styled.option``;
 
-const Properties = () => {
+const Properties = (e) => {
+  const location = useLocation();
+  const cat = location.pathname.split("/")[2];
+  const [filter,setfilter] = useState({});
+  const [sort,setsort] = useState('newest');
+
+  const handleFilters = (e) => {
+    const value = e.target.value;
+    setfilter({
+      ...filter,
+      [e.target.name]: value,
+    });
+  };
+
+  console.log(filter);
+
   return (
     <Container>
         <Navbar/>
         <Title> Property</Title>
         <FilterContainer>
           <Filter ><FilterText>Filter Products:</FilterText>
-          <Select>
+          <Select name='color' onChange={handleFilters}>
             <Option disabled selected>
               Color
             </Option>
@@ -48,8 +65,8 @@ const Properties = () => {
             <Option>Blue</Option>
             <Option>Yellow</Option>
             <Option>Green</Option>
-          </Select>
-          <Select>
+          </Select >
+          <Select name='size' onChange={handleFilters}>
             <Option disabled selected>
               Size
             </Option>
@@ -60,14 +77,14 @@ const Properties = () => {
           </Select>
           </Filter>
           <Filter ><FilterText>Sort Products:</FilterText>
-            <Select>
-              <Option selected>Newest</Option> 
-              <Option>Cost (Asc)</Option>
-              <Option>Cost (Desc)</Option>
+            <Select onChange={(e) => setsort(e.target.value)}>
+              <Option value='newest'>Newest</Option> 
+              <Option value='asc'>Cost (Asc)</Option>
+              <Option value='desc'>Cost (Desc)</Option>
             </Select>
           </Filter>
         </FilterContainer>
-        {/* <PropertyList /> */}
+        <PropertyList cat={cat} filter={filter} sort={sort}/>
         <Newsletter />
         <Footer />
     </Container>

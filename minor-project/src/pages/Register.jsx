@@ -84,7 +84,7 @@ const Register = () => {
       } 
       try {
         setloading(true);
-        const result = await axios.post('/api/users/register',user).data;
+        const result = await axios.post('/api/auth/register',user).data;
         setloading(false);
         setsuccess(true);
 
